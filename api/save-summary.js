@@ -11,57 +11,70 @@ export default async function handler(req, res) {
     });
   }
 
+  // Formato do resumo
   const summary = `
-MEETING SUMMARY
+📊 CAPTIA AI MEETING SUMMARY
+
+🎯 MEETING SUMMARY
 - Objective:
 - Key discussion points:
 - Client pain points:
 - Objections / concerns:
 - Decisions made:
 
-NEXT STEPS
+✅ NEXT STEPS
 - Action items:
 - Owner:
 - Deadline:
 
-IMPORTANT DETAILS
+📋 IMPORTANT DETAILS
 - Budget:
 - Timeline:
 - Products / services mentioned:
 - Other notes:
 
-RAW TRANSCRIPT
+📝 RAW TRANSCRIPT
 ${transcript || "(no transcript provided)"}
 `.trim();
 
   try {
-    const updateRes = await fetch(
-      `https://api.hubapi.com/crm/v3/objects/contacts/${contactId}`,
+    // Criar engagement/nota na timeline
+    const engagementRes = await fetch(
+      "https://api.hubapi.com/engagements/v1/engagements",
       {
-        method: "PATCH",
+        method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          properties: {
-            captia_ai_summary: summary
+          engagement: {
+            active: true,
+            type: "NOTE",
+            timestamp: Date.now()
+          },
+          associations: {
+            contactIds: [parseInt(contactId)]
+          },
+          metadata: {
+            body: summary
           }
         })
       }
     );
 
-    if (!updateRes.ok) {
-      const error = await updateRes.json();
+    if (!engagementRes.ok) {
+      const error = await engagementRes.json();
       return res.status(400).json(error);
     }
 
-    const result = await updateRes.json();
+    const result = await engagementRes.json();
 
     res.json({
       status: "ok",
-      message: "Summary saved to contact",
-      contactId: result.id
+      message: "Summary saved to timeline",
+      engagementId: result.engagement.id,
+      contactId: contactId
     });
   } catch (error) {
     console.error(error);
