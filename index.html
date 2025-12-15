@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captia - Resumos Automáticos de Reuniões com IA para HubSpot</title>
+    <meta name="description" content="Transforme transcrições de reuniões em resumos executivos acionáveis automaticamente no seu HubSpot. Economize horas e nunca perca um follow-up.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .free-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+        
+        .problem h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1f2937;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .problem-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .problem-card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 80px 0;
+        }
+        
+        .solution h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        
+        .solution-subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: #6b7280;
+            margin-bottom: 50px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .feature h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+        
+        .pricing h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1f2937;
+        }
+        
+        .pricing-card {
+            max-width: 450px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 3px solid #667eea;
+        }
+        
+        .pricing-card .price {
+            font-size: 64px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .pricing-card .period {
+            color: #6b7280;
+            font-size: 18px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .features-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+        
+        .features-list li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        /* How it Works */
+        .how-it-works {
+            padding: 80px 0;
+        }
+        
+        .how-it-works h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1f2937;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        /* CTA Final */
+        .cta-final {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-final h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-final p {
+            font-size: 22px;
+            margin-bottom: 40px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            h2 {
+                font-size: 32px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    📊 Captia
+                </div>
+                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="nav-btn">
+                    Instalar Agora
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Nunca Mais Perca um Follow-up</h1>
+            <p>Transforme transcrições de reuniões em resumos executivos acionáveis automaticamente no seu HubSpot</p>
+            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
+                Começar Grátis
+            </a>
+            <div class="free-badge">✨ 5 resumos grátis • Sem cartão de crédito</div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <h2>O Problema que Todo Vendedor Enfrenta</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Horas Perdidas</h3>
+                    <p>Você passa 30-45 minutos escrevendo resumos de cada reunião manualmente</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Oportunidades Perdidas</h3>
+                    <p>70% dos leads se perdem porque não há follow-up adequado</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😰</div>
+                    <h3>Informações Perdidas</h3>
+                    <p>Detalhes importantes são esquecidos e negócios são perdidos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution">
+        <div class="container">
+            <h2>A Solução: Captia AI</h2>
+            <p class="solution-subtitle">Resumos automáticos de reuniões direto na timeline do HubSpot</p>
+            
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <h3>IA Avançada</h3>
+                    <p>Análise inteligente que identifica dores, objeções e próximos passos</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>30 Segundos</h3>
+                    <p>Gere resumos completos em menos tempo do que leva para fazer café</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Score de Fechamento</h3>
+                    <p>Saiba qual a probabilidade de fechar cada negócio</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💡</div>
+                    <h3>Recomendações</h3>
+                    <p>Receba ações estratégicas para cada oportunidade</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2>Preço Simples e Transparente</h2>
+            
+            <div class="pricing-card">
+                <h3>Captia Pro</h3>
+                <div class="price">$15<span class="period">/mês</span></div>
+                
+                <ul class="features-list">
+                    <li>Resumos ilimitados</li>
+                    <li>Análise com IA avançada</li>
+                    <li>Score de probabilidade</li>
+                    <li>Recomendações estratégicas</li>
+                    <li>Integração nativa no HubSpot</li>
+                    <li>Suporte prioritário</li>
+                </ul>
+                
+                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
+                    Começar Agora
+                </a>
+                
+                <p style="margin-top: 20px; color: #6b7280;">💳 Cancele quando quiser • Sem contratos</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>Como Funciona</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Instale em 1 Clique</h3>
+                    <p>Conecte o Captia ao seu HubSpot em segundos</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Cole a Transcrição</h3>
+                    <p>Copie e cole a transcrição da sua reunião</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Resumo Instantâneo</h3>
+                    <p>IA gera resumo completo direto na timeline do contato</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>Pronto para 10x sua Produtividade?</h2>
+            <p>Comece grátis hoje. Não precisa cartão de crédito.</p>
+            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
+                Instalar Captia Grátis
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Captia. Todos os direitos reservados.</p>
+            <p style="margin-top: 10px;">
+                <a href="mailto:contato@captia.com">Contato</a> • 
+                <a href="#">Privacidade</a> • 
+                <a href="#">Termos</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
