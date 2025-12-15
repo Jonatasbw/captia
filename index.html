@@ -23,6 +23,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
         
         /* Header */
@@ -68,32 +70,68 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        /* Hero Section */
+        /* Enhanced Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 100px 0;
+            padding: 80px 0 120px 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
         .hero h1 {
-            font-size: 52px;
-            margin-bottom: 20px;
+            font-size: 60px;
+            margin-bottom: 25px;
             line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
         
-        .hero p {
+        .hero-subtitle {
             font-size: 22px;
             margin-bottom: 40px;
             opacity: 0.95;
-            max-width: 800px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
         }
         
         .cta-button {
-            background: white;
-            color: #667eea;
             border: none;
             padding: 18px 50px;
             border-radius: 30px;
@@ -105,19 +143,170 @@
             text-decoration: none;
         }
         
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .cta-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
         
-        .free-badge {
-            display: inline-block;
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        
+        .cta-secondary {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(255,255,255,0.25);
+        }
+        
+        .hero-trust {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .trust-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(16,185,129,0.9);
+            border-radius: 50%;
+            font-size: 14px;
+        }
+        
+        /* Demo Visual */
+        .hero-visual {
+            max-width: 800px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            overflow: hidden;
+            text-align: left;
+            animation: float 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(2deg); }
+            50% { transform: translateY(-20px) rotateX(-2deg); }
+        }
+        
+        .demo-header {
+            background: #f9fafb;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .demo-dots {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .demo-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+        
+        .demo-dots span:nth-child(1) { background: #ef4444; }
+        .demo-dots span:nth-child(2) { background: #f59e0b; }
+        .demo-dots span:nth-child(3) { background: #10b981; }
+        
+        .demo-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 16px;
+        }
+        
+        .demo-content {
+            padding: 30px;
+            background: white;
+        }
+        
+        .demo-section {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .demo-section:hover {
+            transform: translateX(5px);
+        }
+        
+        .demo-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .demo-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .demo-text {
+            color: #4b5563;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .demo-text strong {
+            color: #1f2937;
+        }
+        
+        .probability-high {
             background: #10b981;
             color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            margin-top: 20px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .demo-footer {
+            background: #f9fafb;
+            padding: 15px 30px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .demo-time {
+            color: #10b981;
             font-weight: 600;
+            font-size: 14px;
         }
         
         /* Stats Section */
@@ -515,8 +704,21 @@
                 font-size: 36px;
             }
             
-            .hero p {
+            .hero-subtitle {
                 font-size: 18px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .cta-button {
+                width: 100%;
+            }
+            
+            .demo-card {
+                margin: 0 20px;
             }
             
             h2 {
@@ -547,12 +749,70 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Never Miss a Follow-up Again</h1>
-            <p>Transform meeting transcripts into actionable executive summaries automatically in your HubSpot timeline</p>
-            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
-                Start Free Trial
-            </a>
-            <div class="free-badge">✨ 5 Free Summaries • No Credit Card Required</div>
+            <div class="hero-badge">🚀 Trusted by 500+ sales teams worldwide</div>
+            <h1>Stop Wasting Hours on<br>Meeting Notes</h1>
+            <p class="hero-subtitle">AI-powered meeting summaries that identify pain points, objections, and next steps automatically in your HubSpot</p>
+            
+            <div class="hero-buttons">
+                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button cta-primary">
+                    Start Free Trial →
+                </a>
+                <a href="#how-it-works" class="cta-button cta-secondary">
+                    See How It Works
+                </a>
+            </div>
+            
+            <div class="hero-trust">
+                <div class="trust-badge">
+                    <span class="trust-icon">✓</span> 5 Free Summaries
+                </div>
+                <div class="trust-badge">
+                    <span class="trust-icon">✓</span> No Credit Card
+                </div>
+                <div class="trust-badge">
+                    <span class="trust-icon">✓</span> Setup in 60 Seconds
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="demo-title">Meeting Summary - Sarah's Discovery Call</div>
+                    </div>
+                    <div class="demo-content">
+                        <div class="demo-section">
+                            <div class="demo-icon">🎯</div>
+                            <div class="demo-text">
+                                <strong>Pain Point:</strong> Losing 70% of leads due to poor follow-up
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <div class="demo-icon">💰</div>
+                            <div class="demo-text">
+                                <strong>Budget:</strong> $12,000/month | <strong>Timeline:</strong> Q1 2025
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <div class="demo-icon">🎲</div>
+                            <div class="demo-text">
+                                <strong>Close Probability:</strong> <span class="probability-high">HIGH</span> - CEO approval needed
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <div class="demo-icon">✅</div>
+                            <div class="demo-text">
+                                <strong>Next Step:</strong> Demo on Dec 17 at 3pm with technical team
+                            </div>
+                        </div>
+                    </div>
+                    <div class="demo-footer">
+                        <span class="demo-time">⚡ Generated in 2.3 seconds</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -716,7 +976,7 @@
                     <li>Regular feature updates</li>
                 </ul>
                 
-                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
+                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button cta-primary">
                     Start Now
                 </a>
                 
@@ -726,7 +986,7 @@
     </section>
 
     <!-- How it Works -->
-    <section class="how-it-works">
+    <section class="how-it-works" id="how-it-works">
         <div class="container">
             <h2>How It Works</h2>
             
@@ -797,7 +1057,7 @@
         <div class="container">
             <h2>Ready to 10x Your Sales Productivity?</h2>
             <p>Join hundreds of sales teams using Captia to close more deals faster.</p>
-            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
+            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button cta-primary">
                 Install Captia Free
             </a>
         </div>
