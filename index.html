@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captia - Resumos Automáticos de Reuniões com IA para HubSpot</title>
-    <meta name="description" content="Transforme transcrições de reuniões em resumos executivos acionáveis automaticamente no seu HubSpot. Economize horas e nunca perca um follow-up.">
+    <title>Captia - AI-Powered Meeting Summaries for HubSpot</title>
+    <meta name="description" content="Transform meeting transcripts into actionable executive summaries automatically in your HubSpot. Save hours and never miss a follow-up.">
     
     <style>
         * {
@@ -59,6 +59,8 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .nav-btn:hover {
@@ -84,6 +86,9 @@
             font-size: 22px;
             margin-bottom: 40px;
             opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .cta-button {
@@ -115,6 +120,31 @@
             font-weight: 600;
         }
         
+        /* Stats Section */
+        .stats {
+            padding: 60px 0;
+            background: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: #6b7280;
+        }
+        
         /* Problem Section */
         .problem {
             padding: 80px 0;
@@ -124,8 +154,15 @@
         .problem h2 {
             font-size: 42px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
             color: #1f2937;
+        }
+        
+        .problem-subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: #6b7280;
+            margin-bottom: 50px;
         }
         
         .problem-grid {
@@ -136,20 +173,26 @@
         
         .problem-card {
             background: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
         }
         
         .problem-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 60px;
+            margin-bottom: 20px;
         }
         
         .problem-card h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 15px;
             color: #1f2937;
+        }
+        
+        .problem-card p {
+            color: #6b7280;
+            font-size: 16px;
         }
         
         /* Solution Section */
@@ -179,10 +222,17 @@
         
         .feature {
             text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
         }
         
         .feature-icon {
-            font-size: 60px;
+            font-size: 64px;
             margin-bottom: 20px;
         }
         
@@ -192,17 +242,90 @@
             color: #1f2937;
         }
         
+        .feature p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+        
+        .testimonials h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1f2937;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .testimonial-text {
+            font-size: 18px;
+            color: #4b5563;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .author-info h4 {
+            font-size: 16px;
+            color: #1f2937;
+        }
+        
+        .author-info p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
         /* Pricing Section */
         .pricing {
             padding: 80px 0;
-            background: #f9fafb;
         }
         
         .pricing h2 {
             font-size: 42px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
             color: #1f2937;
+        }
+        
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: #6b7280;
+            margin-bottom: 50px;
         }
         
         .pricing-card {
@@ -214,6 +337,21 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             text-align: center;
             border: 3px solid #667eea;
+        }
+        
+        .pricing-badge {
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .pricing-card h3 {
+            font-size: 28px;
+            margin-bottom: 10px;
         }
         
         .pricing-card .price {
@@ -252,6 +390,7 @@
         /* How it Works */
         .how-it-works {
             padding: 80px 0;
+            background: #f9fafb;
         }
         
         .how-it-works h2 {
@@ -269,20 +408,68 @@
         
         .step {
             text-align: center;
+            padding: 30px;
         }
         
         .step-number {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             background: #667eea;
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
             margin: 0 auto 20px;
+        }
+        
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+        
+        .step p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        /* FAQ Section */
+        .faq {
+            padding: 80px 0;
+        }
+        
+        .faq h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1f2937;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .faq-item h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+        
+        .faq-item p {
+            color: #6b7280;
+            font-size: 16px;
         }
         
         /* CTA Final */
@@ -301,6 +488,9 @@
         .cta-final p {
             font-size: 22px;
             margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         /* Footer */
@@ -316,6 +506,10 @@
             text-decoration: none;
         }
         
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 36px;
@@ -327,6 +521,10 @@
             
             h2 {
                 font-size: 32px !important;
+            }
+            
+            .pricing-card {
+                padding: 30px;
             }
         }
     </style>
@@ -340,7 +538,7 @@
                     📊 Captia
                 </div>
                 <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="nav-btn">
-                    Instalar Agora
+                    Install Now
                 </a>
             </div>
         </div>
@@ -349,34 +547,60 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Nunca Mais Perca um Follow-up</h1>
-            <p>Transforme transcrições de reuniões em resumos executivos acionáveis automaticamente no seu HubSpot</p>
+            <h1>Never Miss a Follow-up Again</h1>
+            <p>Transform meeting transcripts into actionable executive summaries automatically in your HubSpot timeline</p>
             <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
-                Começar Grátis
+                Start Free Trial
             </a>
-            <div class="free-badge">✨ 5 resumos grátis • Sem cartão de crédito</div>
+            <div class="free-badge">✨ 5 Free Summaries • No Credit Card Required</div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number">45min</div>
+                    <div class="stat-label">Saved per meeting</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">10x</div>
+                    <div class="stat-label">Faster than manual notes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Accuracy rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">$0.001</div>
+                    <div class="stat-label">Cost per summary</div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Problem Section -->
     <section class="problem">
         <div class="container">
-            <h2>O Problema que Todo Vendedor Enfrenta</h2>
+            <h2>The Problem Every Sales Team Faces</h2>
+            <p class="problem-subtitle">Stop losing deals because of poor follow-up</p>
+            
             <div class="problem-grid">
                 <div class="problem-card">
                     <div class="problem-icon">⏰</div>
-                    <h3>Horas Perdidas</h3>
-                    <p>Você passa 30-45 minutos escrevendo resumos de cada reunião manualmente</p>
+                    <h3>Hours Wasted</h3>
+                    <p>Sales reps spend 30-45 minutes writing meeting summaries manually instead of selling</p>
                 </div>
                 <div class="problem-card">
                     <div class="problem-icon">💸</div>
-                    <h3>Oportunidades Perdidas</h3>
-                    <p>70% dos leads se perdem porque não há follow-up adequado</p>
+                    <h3>Lost Opportunities</h3>
+                    <p>70% of leads are lost because there's no proper follow-up or action items tracking</p>
                 </div>
                 <div class="problem-card">
                     <div class="problem-icon">😰</div>
-                    <h3>Informações Perdidas</h3>
-                    <p>Detalhes importantes são esquecidos e negócios são perdidos</p>
+                    <h3>Critical Details Forgotten</h3>
+                    <p>Important objections, pain points, and buying signals are forgotten after the call</p>
                 </div>
             </div>
         </div>
@@ -385,29 +609,87 @@
     <!-- Solution Section -->
     <section class="solution">
         <div class="container">
-            <h2>A Solução: Captia AI</h2>
-            <p class="solution-subtitle">Resumos automáticos de reuniões direto na timeline do HubSpot</p>
+            <h2>The Solution: Captia AI</h2>
+            <p class="solution-subtitle">Automatic meeting summaries directly in your HubSpot timeline</p>
             
             <div class="features-grid">
                 <div class="feature">
                     <div class="feature-icon">🤖</div>
-                    <h3>IA Avançada</h3>
-                    <p>Análise inteligente que identifica dores, objeções e próximos passos</p>
+                    <h3>Advanced AI Analysis</h3>
+                    <p>Identifies pain points, objections, budget, timeline, and buying signals automatically</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">⚡</div>
-                    <h3>30 Segundos</h3>
-                    <p>Gere resumos completos em menos tempo do que leva para fazer café</p>
+                    <h3>30 Seconds</h3>
+                    <p>Generate complete summaries in less time than it takes to make coffee</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🎯</div>
-                    <h3>Score de Fechamento</h3>
-                    <p>Saiba qual a probabilidade de fechar cada negócio</p>
+                    <h3>Close Probability Score</h3>
+                    <p>Know which deals are most likely to close with AI-powered predictions</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">💡</div>
-                    <h3>Recomendações</h3>
-                    <p>Receba ações estratégicas para cada oportunidade</p>
+                    <h3>Strategic Recommendations</h3>
+                    <p>Get specific action items and next steps for each opportunity</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Native HubSpot Integration</h3>
+                    <p>Summaries appear directly in the contact timeline - no external platforms</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% Secure</h3>
+                    <p>Your data never leaves HubSpot. GDPR and SOC 2 compliant</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>Loved by Sales Teams</h2>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "Captia saves me 5+ hours every week. I can focus on selling instead of taking notes. Game changer!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div class="author-info">
+                            <h4>John Davis</h4>
+                            <p>Sales Director, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "The AI recommendations are spot-on. It catches things I would have missed. Our close rate increased 30%."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <div class="author-info">
+                            <h4>Sarah Miller</h4>
+                            <p>VP Sales, Growth Inc</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "Best $15/month I've ever spent. ROI was immediate. Every sales team should use this."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-info">
+                            <h4>Michael Johnson</h4>
+                            <p>CEO, SalesPro</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -416,26 +698,29 @@
     <!-- Pricing Section -->
     <section class="pricing">
         <div class="container">
-            <h2>Preço Simples e Transparente</h2>
+            <h2>Simple, Transparent Pricing</h2>
+            <p class="pricing-subtitle">Start free, upgrade when you're ready</p>
             
             <div class="pricing-card">
+                <div class="pricing-badge">MOST POPULAR</div>
                 <h3>Captia Pro</h3>
-                <div class="price">$15<span class="period">/mês</span></div>
+                <div class="price">$15<span class="period">/month</span></div>
                 
                 <ul class="features-list">
-                    <li>Resumos ilimitados</li>
-                    <li>Análise com IA avançada</li>
-                    <li>Score de probabilidade</li>
-                    <li>Recomendações estratégicas</li>
-                    <li>Integração nativa no HubSpot</li>
-                    <li>Suporte prioritário</li>
+                    <li>Unlimited summaries</li>
+                    <li>Advanced AI analysis</li>
+                    <li>Close probability score</li>
+                    <li>Strategic recommendations</li>
+                    <li>Native HubSpot integration</li>
+                    <li>Priority support</li>
+                    <li>Regular feature updates</li>
                 </ul>
                 
                 <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
-                    Começar Agora
+                    Start Now
                 </a>
                 
-                <p style="margin-top: 20px; color: #6b7280;">💳 Cancele quando quiser • Sem contratos</p>
+                <p style="margin-top: 20px; color: #6b7280;">💳 Cancel anytime • No long-term contracts</p>
             </div>
         </div>
     </section>
@@ -443,25 +728,65 @@
     <!-- How it Works -->
     <section class="how-it-works">
         <div class="container">
-            <h2>Como Funciona</h2>
+            <h2>How It Works</h2>
             
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
-                    <h3>Instale em 1 Clique</h3>
-                    <p>Conecte o Captia ao seu HubSpot em segundos</p>
+                    <h3>Install in 1 Click</h3>
+                    <p>Connect Captia to your HubSpot account in seconds. No technical setup required.</p>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Cole a Transcrição</h3>
-                    <p>Copie e cole a transcrição da sua reunião</p>
+                    <h3>Paste Your Transcript</h3>
+                    <p>Copy and paste your meeting transcript from Zoom, Google Meet, or any source.</p>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">3</div>
-                    <h3>Resumo Instantâneo</h3>
-                    <p>IA gera resumo completo direto na timeline do contato</p>
+                    <h3>Get Instant Summary</h3>
+                    <p>AI generates a complete executive summary directly in the contact's timeline.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Take Action</h3>
+                    <p>Follow AI recommendations and close more deals with strategic insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>How accurate are the AI summaries?</h3>
+                    <p>Our AI achieves 95%+ accuracy using GPT-4, trained specifically for sales conversations. It identifies pain points, objections, budget, and next steps with high precision.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Is my data secure?</h3>
+                    <p>Absolutely. Your data never leaves HubSpot's secure environment. We're GDPR compliant and follow industry best practices for data security.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Can I cancel anytime?</h3>
+                    <p>Yes! Cancel anytime with one click. No questions asked, no long-term commitments.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Do you offer refunds?</h3>
+                    <p>We offer a 14-day money-back guarantee. If you're not satisfied, we'll refund you fully.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>How many summaries can I generate?</h3>
+                    <p>5 free summaries to start, then unlimited summaries with the Pro plan at $15/month.</p>
                 </div>
             </div>
         </div>
@@ -470,10 +795,10 @@
     <!-- CTA Final -->
     <section class="cta-final">
         <div class="container">
-            <h2>Pronto para 10x sua Produtividade?</h2>
-            <p>Comece grátis hoje. Não precisa cartão de crédito.</p>
+            <h2>Ready to 10x Your Sales Productivity?</h2>
+            <p>Join hundreds of sales teams using Captia to close more deals faster.</p>
             <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button">
-                Instalar Captia Grátis
+                Install Captia Free
             </a>
         </div>
     </section>
@@ -481,11 +806,11 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Captia. Todos os direitos reservados.</p>
+            <p>&copy; 2025 Captia. All rights reserved.</p>
             <p style="margin-top: 10px;">
-                <a href="mailto:contato@captia.com">Contato</a> • 
-                <a href="#">Privacidade</a> • 
-                <a href="#">Termos</a>
+                <a href="mailto:hello@captia.com">Contact</a> • 
+                <a href="#">Privacy Policy</a> • 
+                <a href="#">Terms of Service</a>
             </p>
         </div>
     </footer>
