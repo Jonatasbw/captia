@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Chamar OpenAI para gerar resumo
+    // Chamar OpenAI para gerar resumo inteligente
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -24,39 +24,63 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are a professional meeting summarizer. Analyze the meeting transcript and create a structured summary in Portuguese (Brazil).
+            content: `Você é um assistente especializado em vendas B2B que analisa transcrições de reuniões e cria resumos executivos acionáveis.
 
-Format the summary EXACTLY like this:
+INSTRUÇÕES CRÍTICAS:
+- Seja EXTREMAMENTE objetivo e direto
+- Identifique APENAS informações explicitamente mencionadas
+- Use linguagem profissional de vendas
+- Destaque PAIN POINTS específicos do cliente
+- Identifique SINAIS DE COMPRA e OBJEÇÕES claramente
+- Sugira PRÓXIMOS PASSOS estratégicos baseados na conversa
+- Se algo não foi mencionado, escreva "Não mencionado"
 
-🎯 RESUMO DA REUNIÃO
-- Objetivo: [main goal of the meeting]
-- Pontos principais discutidos: [2-3 key discussion points]
-- Dores/problemas do cliente: [pain points mentioned]
-- Objeções/preocupações: [any concerns raised]
-- Decisões tomadas: [decisions made]
+FORMATO OBRIGATÓRIO:
+
+🎯 RESUMO EXECUTIVO
+- **Tipo de reunião:** [Discovery/Demo/Negociação/Follow-up]
+- **Objetivo principal:** [1 frase clara]
+- **Resultado:** [Positivo/Neutro/Precisa atenção - 1 frase]
+
+💼 CONTEXTO DO CLIENTE
+- **Empresa/Segmento:** [se mencionado]
+- **Dor principal:** [problema específico que o cliente quer resolver]
+- **Impacto do problema:** [consequências mencionadas]
+- **Urgência:** [Alta/Média/Baixa - baseado no tom]
+
+💰 OPORTUNIDADE
+- **Orçamento:** [valor mencionado ou "Não discutido"]
+- **Timeline:** [quando querem começar]
+- **Decisores:** [quem participa da decisão]
+- **Concorrentes:** [se mencionado algum]
+
+🚨 OBJEÇÕES E RISCOS
+- [Liste cada objeção específica mencionada]
+- [Se não houver, escreva "Nenhuma objeção levantada"]
 
 ✅ PRÓXIMOS PASSOS
-- Ações: [action items with owner if mentioned]
-- Responsável: [who is responsible]
-- Prazo: [deadline if mentioned]
+- **Imediato:** [o que foi acordado para fazer agora]
+- **Prazo:** [data/período específico]
+- **Responsável:** [quem vai fazer - cliente ou vendedor]
 
-📋 DETALHES IMPORTANTES
-- Orçamento: [budget discussed]
-- Timeline: [timeline mentioned]
-- Produtos/serviços: [products or services discussed]
-- Outras notas: [other relevant info]
+🎲 PROBABILIDADE DE FECHAMENTO
+- **Score:** [Alto/Médio/Baixo]
+- **Justificativa:** [1 frase explicando o score]
 
-Be concise but informative. If information is not mentioned in the transcript, write "Não mencionado" for that field.`
+💡 RECOMENDAÇÕES ESTRATÉGICAS
+- [2-3 ações específicas que o vendedor deve tomar baseado na conversa]
+
+Seja conciso. Máximo 2-3 linhas por seção.`
           },
           {
             role: "user",
-            content: `Analise esta transcrição de reunião e crie um resumo estruturado:
+            content: `Analise esta transcrição de reunião de vendas e crie um resumo executivo acionável:
 
 ${transcript}`
           }
         ],
         temperature: 0.7,
-        max_tokens: 800
+        max_tokens: 1000
       })
     });
 
@@ -69,14 +93,24 @@ ${transcript}`
     const aiData = await aiResponse.json();
     const aiSummary = aiData.choices[0].message.content;
 
-    // Formatar resumo final
+    // Formatar resumo final com cabeçalho profissional
     const finalSummary = `📊 CAPTIA AI MEETING SUMMARY
+Generated on ${new Date().toLocaleDateString('pt-BR', { 
+  day: '2-digit', 
+  month: 'long', 
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit'
+})}
 
 ${aiSummary}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 TRANSCRIÇÃO ORIGINAL
-${transcript}`;
+📝 TRANSCRIÇÃO COMPLETA
+${transcript}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Powered by Captia AI | captia.com`;
 
     // Criar engagement/nota na timeline
     const engagementRes = await fetch(
