@@ -1,9 +1,21 @@
+import admin from 'firebase-admin';
+
+// Inicializar Firebase Admin
+if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
+
+const db = admin.firestore();
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).send("Method not allowed");
   }
 
-  const { accessToken, contactId, transcript } = req.body;
+  const { accessToken, contactId, transcript, userId } = req.body;
 
   if (!accessToken || !contactId || !transcript) {
     return res.status(400).json({ 
@@ -11,8 +23,38 @@ export default async function handler(req, res) {
     });
   }
 
+  if (!userId) {
+    return res.status(400).json({ 
+      error: "Missing userId - required for quota tracking" 
+    });
+  }
+
   try {
-    // Chamar OpenAI para gerar resumo inteligente
+    // VERIFICAR QUOTA ANTES DE GERAR
+    const userDoc = await db.collection('users').doc(userId).get();
+    
+    let summariesUsed = 0;
+    let isPro = false;
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      summariesUsed = userData.summariesUsed || 0;
+      isPro = userData.isPro || false;
+    }
+
+    // Bloquear se excedeu limite e não é PRO
+    const FREE_LIMIT = 5;
+    if (!isPro && summariesUsed >= FREE_LIMIT) {
+      return res.status(403).json({
+        error: "Free limit reached",
+        message: "You've used all 5 free summaries. Upgrade to Pro for unlimited summaries.",
+        summariesUsed: summariesUsed,
+        needsUpgrade: true,
+        upgradeUrl: "https://captia.vercel.app/#pricing"
+      });
+    }
+
+    // Chamar OpenAI para gerar resumo
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -24,57 +66,56 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `Você é um assistente especializado em vendas B2B que analisa transcrições de reuniões e cria resumos executivos acionáveis.
+            content: `You are a professional meeting summarizer. Analyze the meeting transcript and create a structured summary.
 
-INSTRUÇÕES CRÍTICAS:
-- Seja EXTREMAMENTE objetivo e direto
-- Identifique APENAS informações explicitamente mencionadas
-- Use linguagem profissional de vendas
-- Destaque PAIN POINTS específicos do cliente
-- Identifique SINAIS DE COMPRA e OBJEÇÕES claramente
-- Sugira PRÓXIMOS PASSOS estratégicos baseados na conversa
-- Se algo não foi mencionado, escreva "Não mencionado"
+INSTRUCTIONS:
+- Be EXTREMELY objective and direct
+- Identify ONLY information explicitly mentioned
+- Use professional sales language
+- Highlight PAIN POINTS and BUYING SIGNALS
+- Identify OBJECTIONS clearly
+- Suggest STRATEGIC NEXT STEPS
 
-FORMATO OBRIGATÓRIO:
+MANDATORY FORMAT:
 
-🎯 RESUMO EXECUTIVO
-- **Tipo de reunião:** [Discovery/Demo/Negociação/Follow-up]
-- **Objetivo principal:** [1 frase clara]
-- **Resultado:** [Positivo/Neutro/Precisa atenção - 1 frase]
+🎯 EXECUTIVE SUMMARY
+- **Meeting Type:** [Discovery/Demo/Negotiation/Follow-up]
+- **Main Objective:** [1 clear sentence]
+- **Outcome:** [Positive/Neutral/Needs attention - 1 sentence]
 
-💼 CONTEXTO DO CLIENTE
-- **Empresa/Segmento:** [se mencionado]
-- **Dor principal:** [problema específico que o cliente quer resolver]
-- **Impacto do problema:** [consequências mencionadas]
-- **Urgência:** [Alta/Média/Baixa - baseado no tom]
+💼 CLIENT CONTEXT
+- **Company/Segment:** [if mentioned]
+- **Main Pain Point:** [specific problem client wants to solve]
+- **Problem Impact:** [consequences mentioned]
+- **Urgency:** [High/Medium/Low - based on tone]
 
-💰 OPORTUNIDADE
-- **Orçamento:** [valor mencionado ou "Não discutido"]
-- **Timeline:** [quando querem começar]
-- **Decisores:** [quem participa da decisão]
-- **Concorrentes:** [se mencionado algum]
+💰 OPPORTUNITY
+- **Budget:** [mentioned amount or "Not discussed"]
+- **Timeline:** [when they want to start]
+- **Decision Makers:** [who participates in decision]
+- **Competitors:** [if any mentioned]
 
-🚨 OBJEÇÕES E RISCOS
-- [Liste cada objeção específica mencionada]
-- [Se não houver, escreva "Nenhuma objeção levantada"]
+🚨 OBJECTIONS AND RISKS
+- [List each specific objection mentioned]
+- [If none, write "No objections raised"]
 
-✅ PRÓXIMOS PASSOS
-- **Imediato:** [o que foi acordado para fazer agora]
-- **Prazo:** [data/período específico]
-- **Responsável:** [quem vai fazer - cliente ou vendedor]
+✅ NEXT STEPS
+- **Immediate:** [what was agreed to do now]
+- **Deadline:** [specific date/period]
+- **Responsible:** [who will do - client or seller]
 
-🎲 PROBABILIDADE DE FECHAMENTO
-- **Score:** [Alto/Médio/Baixo]
-- **Justificativa:** [1 frase explicando o score]
+🎲 CLOSE PROBABILITY
+- **Score:** [High/Medium/Low]
+- **Justification:** [1 sentence explaining the score]
 
-💡 RECOMENDAÇÕES ESTRATÉGICAS
-- [2-3 ações específicas que o vendedor deve tomar baseado na conversa]
+💡 STRATEGIC RECOMMENDATIONS
+- [2-3 specific actions the seller should take based on the conversation]
 
-Seja conciso. Máximo 2-3 linhas por seção.`
+Be concise. Maximum 2-3 lines per section.`
           },
           {
             role: "user",
-            content: `Analise esta transcrição de reunião de vendas e crie um resumo executivo acionável:
+            content: `Analyze this sales meeting transcript and create an actionable executive summary:
 
 ${transcript}`
           }
@@ -93,20 +134,20 @@ ${transcript}`
     const aiData = await aiResponse.json();
     const aiSummary = aiData.choices[0].message.content;
 
-    // Formatar resumo final com cabeçalho profissional
+    // Formatar resumo final
     const finalSummary = `📊 CAPTIA AI MEETING SUMMARY
-Generated on ${new Date().toLocaleDateString('pt-BR', { 
-  day: '2-digit', 
-  month: 'long', 
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit'
-})}
+Generated on ${new Date().toLocaleDateString('en-US', { 
+      day: '2-digit', 
+      month: 'long', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })}
 
 ${aiSummary}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 TRANSCRIÇÃO COMPLETA
+📝 FULL TRANSCRIPT
 ${transcript}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -144,14 +185,37 @@ Powered by Captia AI | captia.com`;
 
     const result = await engagementRes.json();
 
+    // INCREMENTAR CONTADOR APÓS SUCESSO
+    if (userDoc.exists) {
+      await db.collection('users').doc(userId).update({
+        summariesUsed: admin.firestore.FieldValue.increment(1),
+        lastUsedAt: new Date().toISOString()
+      });
+    } else {
+      await db.collection('users').doc(userId).set({
+        summariesUsed: 1,
+        isPro: false,
+        createdAt: new Date().toISOString(),
+        lastUsedAt: new Date().toISOString()
+      });
+    }
+
+    // Calcular novo saldo
+    const newSummariesUsed = summariesUsed + 1;
+    const summariesRemaining = isPro ? 'unlimited' : Math.max(0, FREE_LIMIT - newSummariesUsed);
+
     res.json({
       status: "ok",
       message: "AI summary saved to timeline",
       engagementId: result.engagement.id,
       contactId: contactId,
       tokensUsed: aiData.usage.total_tokens,
-      cost: `~$${(aiData.usage.total_tokens / 1000000 * 0.15).toFixed(4)}`
+      cost: `~$${(aiData.usage.total_tokens / 1000000 * 0.15).toFixed(4)}`,
+      summariesUsed: newSummariesUsed,
+      summariesRemaining: summariesRemaining,
+      isPro: isPro
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
