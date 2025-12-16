@@ -1,7 +1,5 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -13,7 +11,23 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing userId' });
   }
 
+  // DEBUG: Verificar se a chave existe
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  
+  if (!secretKey) {
+    return res.status(500).json({ 
+      error: 'STRIPE_SECRET_KEY not configured',
+      hint: 'Check Vercel environment variables'
+    });
+  }
+
+  console.log('[STRIPE] Secret key exists:', !!secretKey);
+  console.log('[STRIPE] Secret key starts with:', secretKey.substring(0, 15));
+  console.log('[STRIPE] Secret key length:', secretKey.length);
+
   try {
+    const stripe = new Stripe(secretKey);
+    
     console.log('[STRIPE] Creating checkout session for userId:', userId);
 
     // Criar sessão de checkout do Stripe
@@ -26,8 +40,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.VERCEL_URL || 'https://captia.vercel.app'}/?success=true`,
-      cancel_url: `${process.env.VERCEL_URL || 'https://captia.vercel.app'}/?canceled=true`,
+      success_url: `https://captia.vercel.app/?success=true`,
+      cancel_url: `https://captia.vercel.app/?canceled=true`,
       client_reference_id: userId,
       customer_email: userEmail || undefined,
       metadata: {
