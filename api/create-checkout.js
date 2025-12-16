@@ -1,3 +1,5 @@
+// v2.1 - Rebuild forced 2024-12-16
+
 import Stripe from 'stripe';
 
 export default async function handler(req, res) {
