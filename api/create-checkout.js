@@ -1,7 +1,4 @@
-// v2.1 - Rebuild forced 2024-12-16
-
-import Stripe from 'stripe';
-
+// Test version - simplified
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -13,45 +10,47 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing userId' });
   }
 
-  // DEBUG: Verificar se a chave existe
+  // Verificar variáveis
   const secretKey = process.env.STRIPE_SECRET_KEY;
+  const priceId = process.env.STRIPE_PRICE_ID;
   
+  console.log('=== STRIPE DEBUG ===');
+  console.log('Secret key exists:', !!secretKey);
+  console.log('Secret key length:', secretKey?.length);
+  console.log('Secret key first 20 chars:', secretKey?.substring(0, 20));
+  console.log('Price ID:', priceId);
+  console.log('===================');
+
   if (!secretKey) {
     return res.status(500).json({ 
-      error: 'STRIPE_SECRET_KEY not configured',
-      hint: 'Check Vercel environment variables'
+      error: 'STRIPE_SECRET_KEY not found in environment'
     });
   }
 
-  console.log('[STRIPE] Secret key exists:', !!secretKey);
-  console.log('[STRIPE] Secret key starts with:', secretKey.substring(0, 15));
-  console.log('[STRIPE] Secret key length:', secretKey.length);
-
   try {
-    const stripe = new Stripe(secretKey);
-    
-    console.log('[STRIPE] Creating checkout session for userId:', userId);
+    // Importar Stripe dinamicamente
+    const Stripe = (await import('stripe')).default;
+    const stripe = new Stripe(secretKey, {
+      apiVersion: '2023-10-16',
+    });
 
-    // Criar sessão de checkout do Stripe
+    console.log('Stripe initialized successfully');
+
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price: process.env.STRIPE_PRICE_ID,
-          quantity: 1,
-        },
-      ],
-      success_url: `https://captia.vercel.app/?success=true`,
-      cancel_url: `https://captia.vercel.app/?canceled=true`,
+      line_items: [{
+        price: priceId,
+        quantity: 1,
+      }],
+      success_url: 'https://captia.vercel.app/?success=true',
+      cancel_url: 'https://captia.vercel.app/?canceled=true',
       client_reference_id: userId,
       customer_email: userEmail || undefined,
-      metadata: {
-        userId: userId,
-      },
+      metadata: { userId },
     });
 
-    console.log('[STRIPE] Checkout session created:', session.id);
+    console.log('Session created:', session.id);
 
     return res.json({
       sessionId: session.id,
@@ -59,10 +58,14 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('[STRIPE ERROR]', error);
+    console.error('STRIPE ERROR:', error.message);
+    console.error('Error type:', error.type);
+    console.error('Error code:', error.code);
+    
     return res.status(500).json({ 
-      error: 'Failed to create checkout session',
-      details: error.message 
+      error: 'Failed to create checkout',
+      message: error.message,
+      type: error.type
     });
   }
 }
