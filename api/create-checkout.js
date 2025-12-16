@@ -1,0 +1,52 @@
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { userId, userEmail } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+
+  try {
+    console.log('[STRIPE] Creating checkout session for userId:', userId);
+
+    // Criar sessão de checkout do Stripe
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: process.env.STRIPE_PRICE_ID,
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.VERCEL_URL || 'https://captia.vercel.app'}/?success=true`,
+      cancel_url: `${process.env.VERCEL_URL || 'https://captia.vercel.app'}/?canceled=true`,
+      client_reference_id: userId,
+      customer_email: userEmail || undefined,
+      metadata: {
+        userId: userId,
+      },
+    });
+
+    console.log('[STRIPE] Checkout session created:', session.id);
+
+    return res.json({
+      sessionId: session.id,
+      url: session.url,
+    });
+
+  } catch (error) {
+    console.error('[STRIPE ERROR]', error);
+    return res.status(500).json({ 
+      error: 'Failed to create checkout session',
+      details: error.message 
+    });
+  }
+}
