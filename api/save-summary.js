@@ -30,6 +30,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    console.log('[CAPTIA] Starting summary generation for userId:', userId);
+
     // VERIFICAR QUOTA ANTES DE GERAR
     const userDoc = await db.collection('users').doc(userId).get();
     
@@ -40,11 +42,15 @@ export default async function handler(req, res) {
       const userData = userDoc.data();
       summariesUsed = userData.summariesUsed || 0;
       isPro = userData.isPro || false;
+      console.log('[CAPTIA] User found. Summaries used:', summariesUsed, 'isPro:', isPro);
+    } else {
+      console.log('[CAPTIA] New user, will be created after generating summary');
     }
 
     // Bloquear se excedeu limite e não é PRO
     const FREE_LIMIT = 5;
     if (!isPro && summariesUsed >= FREE_LIMIT) {
+      console.log('[CAPTIA] User reached free limit');
       return res.status(403).json({
         error: "Free limit reached",
         message: "You've used all 5 free summaries. Upgrade to Pro for unlimited summaries.",
@@ -53,6 +59,8 @@ export default async function handler(req, res) {
         upgradeUrl: "https://captia.vercel.app/#pricing"
       });
     }
+
+    console.log('[CAPTIA] Calling OpenAI API...');
 
     // Chamar OpenAI para gerar resumo
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -127,12 +135,14 @@ ${transcript}`
 
     if (!aiResponse.ok) {
       const error = await aiResponse.json();
-      console.error("OpenAI error:", error);
+      console.error('[CAPTIA] OpenAI error:', error);
       return res.status(500).json({ error: "Failed to generate summary with AI" });
     }
 
     const aiData = await aiResponse.json();
     const aiSummary = aiData.choices[0].message.content;
+
+    console.log('[CAPTIA] OpenAI response received. Tokens used:', aiData.usage.total_tokens);
 
     // Formatar resumo final
     const finalSummary = `📊 CAPTIA AI MEETING SUMMARY
@@ -152,6 +162,8 @@ ${transcript}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Powered by Captia AI | captia.com`;
+
+    console.log('[CAPTIA] Creating HubSpot engagement...');
 
     // Criar engagement/nota na timeline
     const engagementRes = await fetch(
@@ -180,31 +192,43 @@ Powered by Captia AI | captia.com`;
 
     if (!engagementRes.ok) {
       const error = await engagementRes.json();
+      console.error('[CAPTIA] HubSpot engagement error:', error);
       return res.status(400).json(error);
     }
 
     const result = await engagementRes.json();
+    console.log('[CAPTIA] Engagement created successfully:', result.engagement.id);
 
     // INCREMENTAR CONTADOR APÓS SUCESSO
+    console.log('[CAPTIA] Updating user quota...');
+    const userDocRef = db.collection('users').doc(userId);
+
     if (userDoc.exists) {
-      await db.collection('users').doc(userId).update({
+      console.log('[CAPTIA] Updating existing user...');
+      await userDocRef.update({
         summariesUsed: admin.firestore.FieldValue.increment(1),
         lastUsedAt: new Date().toISOString()
       });
+      console.log('[CAPTIA] User updated successfully');
     } else {
-      await db.collection('users').doc(userId).set({
+      console.log('[CAPTIA] Creating new user...');
+      await userDocRef.set({
         summariesUsed: 1,
         isPro: false,
         createdAt: new Date().toISOString(),
         lastUsedAt: new Date().toISOString()
       });
+      console.log('[CAPTIA] User created successfully');
     }
 
     // Calcular novo saldo
     const newSummariesUsed = summariesUsed + 1;
     const summariesRemaining = isPro ? 'unlimited' : Math.max(0, FREE_LIMIT - newSummariesUsed);
 
-    res.json({
+    console.log('[CAPTIA] New summaries used:', newSummariesUsed);
+    console.log('[CAPTIA] Summaries remaining:', summariesRemaining);
+
+    const responseData = {
       status: "ok",
       message: "AI summary saved to timeline",
       engagementId: result.engagement.id,
@@ -214,10 +238,17 @@ Powered by Captia AI | captia.com`;
       summariesUsed: newSummariesUsed,
       summariesRemaining: summariesRemaining,
       isPro: isPro
-    });
+    };
+
+    console.log('[CAPTIA] Returning response:', JSON.stringify(responseData));
+
+    return res.json(responseData);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('[CAPTIA ERROR]', error);
+    return res.status(500).json({ 
+      error: "Internal server error",
+      details: error.message 
+    });
   }
 }
