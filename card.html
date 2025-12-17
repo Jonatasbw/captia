@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            background: #f5f8fa;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .quota {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .quota-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .quota-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .quota-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .quota-numbers {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .form {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success, .error {
+            padding: 15px;
+            margin: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .success.active, .error.active {
+            display: block;
+        }
+        
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        
+        .upgrade-banner {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #78350f;
+            padding: 15px 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .upgrade-banner.active {
+            display: block;
+        }
+        
+        .upgrade-banner a {
+            color: #78350f;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h2>📊 Captia AI Summary</h2>
+            <p style="font-size: 14px; opacity: 0.9;">Generate instant meeting summaries</p>
+        </div>
+        
+        <div class="upgrade-banner" id="upgradeBanner">
+            ⚠️ Free limit reached! <a href="https://captia.vercel.app/#pricing" target="_blank">Upgrade to Pro</a> for unlimited summaries.
+        </div>
+        
+        <div class="quota">
+            <div class="quota-text">
+                <strong id="quotaUsed">0</strong> of <strong id="quotaTotal">5</strong> summaries used
+            </div>
+            <div class="quota-bar">
+                <div class="quota-fill" id="quotaFill" style="width: 0%"></div>
+            </div>
+            <div class="quota-numbers">
+                <span id="quotaRemaining">5</span> remaining
+            </div>
+        </div>
+        
+        <div class="form">
+            <div class="form-group">
+                <label for="transcript">Meeting Transcript</label>
+                <textarea 
+                    id="transcript" 
+                    placeholder="Paste your meeting transcript here...
+
+Example:
+Hi there! Thanks for taking my call.
+Of course! What can I help you with?
+We're looking for an AI solution for our sales team..."
+                ></textarea>
+            </div>
+            
+            <button class="button" id="generateBtn" onclick="generateSummary()">
+                ⚡ Generate AI Summary
+            </button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="color: #6b7280;">Analyzing transcript...</p>
+        </div>
+        
+        <div class="success" id="success">
+            ✅ Summary generated successfully! Check the contact's timeline.
+        </div>
+        
+        <div class="error" id="error"></div>
+    </div>
+    
+    <script>
+        // Get contact ID and access token from HubSpot
+        const contactId = new URLSearchParams(window.location.search).get('contactId');
+        const accessToken = new URLSearchParams(window.location.search).get('token');
+        const userId = new URLSearchParams(window.location.search).get('userId') || 'default_user';
+        
+        // Load quota on page load
+        window.addEventListener('DOMContentLoaded', loadQuota);
+        
+        async function loadQuota() {
+            try {
+                const response = await fetch('https://captia.vercel.app/api/check-quota', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId })
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('quotaUsed').textContent = data.summariesUsed;
+                document.getElementById('quotaRemaining').textContent = 
+                    data.isPro ? 'unlimited' : data.summariesRemaining;
+                
+                if (data.isPro) {
+                    document.getElementById('quotaTotal').textContent = '∞';
+                    document.getElementById('quotaFill').style.width = '100%';
+                    document.getElementById('quotaFill').style.background = 'linear-gradient(90deg, #10b981, #059669)';
+                } else {
+                    const percentage = (data.summariesUsed / 5) * 100;
+                    document.getElementById('quotaFill').style.width = percentage + '%';
+                }
+                
+                if (data.needsUpgrade) {
+                    document.getElementById('upgradeBanner').classList.add('active');
+                    document.getElementById('generateBtn').disabled = true;
+                }
+            } catch (error) {
+                console.error('Error loading quota:', error);
+            }
+        }
+        
+        async function generateSummary() {
+            const transcript = document.getElementById('transcript').value.trim();
+            
+            if (!transcript) {
+                showError('Please paste a meeting transcript first.');
+                return;
+            }
+            
+            if (!contactId || !accessToken) {
+                showError('Missing contact ID or access token. Please refresh the page.');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('success').classList.remove('active');
+            document.getElementById('error').classList.remove('active');
+            
+            try {
+                const response = await fetch('https://captia.vercel.app/api/save-summary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        accessToken: accessToken,
+                        contactId: contactId,
+                        userId: userId,
+                        transcript: transcript
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || data.message || 'Failed to generate summary');
+                }
+                
+                // Success
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('success').classList.add('active');
+                document.getElementById('transcript').value = '';
+                document.getElementById('generateBtn').disabled = false;
+                
+                // Reload quota
+                await loadQuota();
+                
+                // Auto-hide success message
+                setTimeout(() => {
+                    document.getElementById('success').classList.remove('active');
+                }, 5000);
+                
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('generateBtn').disabled = false;
+                showError(error.message);
+            }
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.classList.add('active');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('active');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
