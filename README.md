@@ -29,4 +29,4 @@ NODE_ENV=production
 https://seu-projeto.vercel.app/api/oauth?code=teste
 ```
 
-✅ Pronto para usar!
+✅ Pronto para usar! 
