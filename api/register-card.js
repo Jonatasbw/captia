@@ -4,28 +4,28 @@ export default async function handler(req, res) {
   }
 
   const appId = process.env.HUBSPOT_APP_ID;
-  const privateToken = process.env.HUBSPOT_PRIVATE_APP_TOKEN;
+  const developerKey = process.env.HUBSPOT_DEVELOPER_KEY;
 
-  if (!appId || !privateToken) {
+  if (!appId || !developerKey) {
     console.error('[REGISTER-CARD] Missing variables:', {
       hasAppId: !!appId,
-      hasPrivateToken: !!privateToken
+      hasDeveloperKey: !!developerKey
     });
     return res.status(500).json({ 
-      error: 'Missing HUBSPOT_APP_ID or HUBSPOT_PRIVATE_APP_TOKEN environment variables' 
+      error: 'Missing HUBSPOT_APP_ID or HUBSPOT_DEVELOPER_KEY environment variables' 
     });
   }
 
   try {
     console.log('[REGISTER-CARD] Registering card for App ID:', appId);
 
+    // Usar hapikey como query parameter (método antigo mas ainda funciona)
     const response = await fetch(
-      `https://api.hubapi.com/crm/v3/extensions/cards/${appId}`,
+      `https://api.hubapi.com/crm/v3/extensions/cards/${appId}?hapikey=${developerKey}`,
       {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${privateToken}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           title: "Captia AI Summary",
