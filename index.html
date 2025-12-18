@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captia - Strategic Sales Intelligence for HubSpot</title>
+    <meta name="description" content="Turn meeting transcripts into winning strategies. Get budget detection, decision mapping, and deal scoring that Fathom and Fireflies don't provide. $15/month.">
+    
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VGPBD5VJY6"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-VGPBD5VJY6');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VGPBD5VJY6');
     </script>
-    <!-- End Google Analytics -->
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captia - AI-Powered Meeting Summaries for HubSpot</title>
-    <meta name="description" content="Transform meeting transcripts into actionable executive summaries automatically in your HubSpot. Save hours and never miss a follow-up.">
     
     <style>
         * {
@@ -24,76 +23,22 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
+            color: #1f2937;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Top Banner */
-        .top-banner {
-            background: linear-gradient(90deg, #ff7a59 0%, #ff5555 100%);
-            color: white;
-            padding: 12px 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .top-banner:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 3s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .banner-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .hubspot-logo {
-            background: white;
-            padding: 4px 12px;
-            border-radius: 5px;
-            font-weight: bold;
-            color: #ff7a59;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
         
         /* Header */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
-            backdrop-filter: blur(10px);
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .header-content {
@@ -103,1308 +48,482 @@
         }
         
         .logo {
-            font-size: 32px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .nav-btn {
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 14px 35px;
-            border-radius: 30px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
-            font-size: 16px;
-        }
-        
-        .nav-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255,255,255,0.4);
-        }
-        
-        /* Enhanced Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 100px 0 150px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Animated Background Elements */
-        .hero:before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255,255,255,0.15), transparent);
-            top: -300px;
-            left: -200px;
-            border-radius: 50%;
-            animation: float-blob 20s infinite ease-in-out;
-        }
-        
-        .hero:after {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
-            bottom: -250px;
-            right: -150px;
-            border-radius: 50%;
-            animation: float-blob 15s infinite ease-in-out reverse;
-        }
-        
-        @keyframes float-blob {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(50px, -50px) scale(1.1); }
-            66% { transform: translate(-50px, 50px) scale(0.9); }
-        }
-        
-        /* Floating Particles */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            animation: rise 15s infinite ease-in;
-        }
-        
-        .particle:nth-child(1) { width: 10px; height: 10px; left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { width: 15px; height: 15px; left: 30%; animation-delay: 2s; }
-        .particle:nth-child(3) { width: 8px; height: 8px; left: 50%; animation-delay: 4s; }
-        .particle:nth-child(4) { width: 12px; height: 12px; left: 70%; animation-delay: 1s; }
-        .particle:nth-child(5) { width: 20px; height: 20px; left: 90%; animation-delay: 3s; }
-        
-        @keyframes rise {
-            0% { bottom: -100px; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { bottom: 100%; opacity: 0; }
-        }
-        
-        .hero-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.25);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 35px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.4);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            animation: pulse-badge 3s infinite;
-        }
-        
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .hero h1 {
-            font-size: 68px;
-            margin-bottom: 30px;
-            line-height: 1.1;
-            font-weight: 900;
-            letter-spacing: -2px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
-            animation: fade-in-up 0.8s ease-out;
-        }
-        
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .hero-subtitle {
             font-size: 24px;
-            margin-bottom: 45px;
-            opacity: 0.98;
-            max-width: 750px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-            font-weight: 500;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            animation: fade-in-up 0.8s ease-out 0.2s both;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-            animation: fade-in-up 0.8s ease-out 0.4s both;
-        }
-        
-        .cta-button {
-            border: none;
-            padding: 20px 55px;
-            border-radius: 35px;
-            font-size: 19px;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: inline-block;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta-button:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .cta-button:hover:before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .cta-primary {
-            background: white;
-            color: #667eea;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
-        }
-        
-        .cta-primary:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-        }
-        
-        .cta-secondary {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            backdrop-filter: blur(15px);
-            border: 3px solid rgba(255,255,255,0.4);
-        }
-        
-        .cta-secondary:hover {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.6);
-            transform: translateY(-3px);
-        }
-        
-        .hero-trust {
-            display: flex;
-            gap: 35px;
-            justify-content: center;
-            margin-bottom: 70px;
-            flex-wrap: wrap;
-            animation: fade-in-up 0.8s ease-out 0.6s both;
-        }
-        
-        .trust-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 17px;
-            font-weight: 700;
-            color: white;
-            background: rgba(255,255,255,0.15);
-            padding: 12px 25px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-        
-        .trust-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            background: #10b981;
-            border-radius: 50%;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(16,185,129,0.4);
-        }
-        
-        /* Demo Visual with 3D Effect */
-        .hero-visual {
-            max-width: 900px;
-            margin: 0 auto;
-            perspective: 1500px;
-            animation: fade-in-up 0.8s ease-out 0.8s both;
-        }
-        
-        .demo-card {
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-            overflow: hidden;
-            text-align: left;
-            animation: float-demo 8s ease-in-out infinite;
-            transform-style: preserve-3d;
-            border: 3px solid rgba(255,255,255,0.8);
-        }
-        
-        @keyframes float-demo {
-            0%, 100% { 
-                transform: translateY(0) rotateX(3deg) rotateY(-2deg); 
-                box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-            }
-            50% { 
-                transform: translateY(-25px) rotateX(-3deg) rotateY(2deg); 
-                box-shadow: 0 60px 120px rgba(0,0,0,0.5);
-            }
-        }
-        
-        .demo-header {
-            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-            padding: 25px 30px;
-            border-bottom: 2px solid #d1d5db;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .demo-dots {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .demo-dots span {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
-        
-        .demo-dots span:hover {
-            transform: scale(1.3);
-        }
-        
-        .demo-dots span:nth-child(1) { background: #ef4444; box-shadow: 0 2px 8px rgba(239,68,68,0.5); }
-        .demo-dots span:nth-child(2) { background: #f59e0b; box-shadow: 0 2px 8px rgba(245,158,11,0.5); }
-        .demo-dots span:nth-child(3) { background: #10b981; box-shadow: 0 2px 8px rgba(16,185,129,0.5); }
-        
-        .demo-title {
-            font-weight: 700;
-            color: #1f2937;
-            font-size: 17px;
-        }
-        
-        .demo-content {
-            padding: 40px;
-            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-        }
-        
-        .demo-section {
-            display: flex;
-            gap: 20px;
-            padding: 25px;
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 18px;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        
-        .demo-section:hover {
-            transform: translateX(8px) scale(1.02);
-            border-color: #667eea;
-            box-shadow: 0 8px 25px rgba(102,126,234,0.2);
-        }
-        
-        .demo-section:last-child {
-            margin-bottom: 0;
-        }
-        
-        .demo-icon {
-            font-size: 32px;
-            flex-shrink: 0;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        .demo-text {
-            color: #4b5563;
-            font-size: 16px;
-            line-height: 1.7;
-        }
-        
-        .demo-text strong {
-            color: #1f2937;
-            font-weight: 700;
-        }
-        
-        .probability-high {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(16,185,129,0.3);
-            letter-spacing: 0.5px;
-        }
-        
-        .demo-footer {
-            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-            padding: 20px 40px;
-            border-top: 2px solid #d1d5db;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .demo-time {
-            color: #10b981;
-            font-weight: 700;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        /* Stats Section */
-        .stats {
-            padding: 80px 0;
-            background: white;
-            position: relative;
-        }
-        
-        .stats:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 50px;
-            text-align: center;
-        }
-        
-        .stat {
-            position: relative;
-            padding: 30px;
-            border-radius: 20px;
-            transition: transform 0.3s;
-        }
-        
-        .stat:hover {
-            transform: translateY(-10px);
-        }
-        
-        .stat-number {
-            font-size: 56px;
-            font-weight: 900;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         
-        .stat-label {
-            font-size: 17px;
-            color: #6b7280;
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
             font-weight: 600;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero .subtitle {
+            font-size: 22px;
+            margin-bottom: 16px;
+            opacity: 0.95;
+        }
+        
+        .hero .subtext {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-cta {
+            background: white;
+            color: #667eea;
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        
+        .hero-cta:hover {
+            transform: scale(1.05);
+        }
+        
+        .hero-note {
+            margin-top: 16px;
+            font-size: 14px;
+            opacity: 0.9;
         }
         
         /* Problem Section */
         .problem {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-            position: relative;
+            padding: 80px 0;
+            background: #f9fafb;
         }
         
-        .problem h2 {
-            font-size: 48px;
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 25px;
-            color: #1f2937;
-            font-weight: 900;
+            margin-bottom: 16px;
         }
         
-        .problem-subtitle {
+        .section-subtitle {
+            font-size: 18px;
             text-align: center;
-            font-size: 22px;
             color: #6b7280;
             margin-bottom: 60px;
-            font-weight: 500;
         }
         
         .problem-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
         }
         
         .problem-card {
             background: white;
-            padding: 45px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.4s;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .problem-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-        
-        .problem-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            border-color: #667eea;
-        }
-        
-        .problem-card:hover:before {
-            transform: scaleX(1);
-        }
-        
-        .problem-icon {
-            font-size: 70px;
-            margin-bottom: 25px;
-            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.1));
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .problem-card h3 {
-            font-size: 26px;
-            margin-bottom: 18px;
-            color: #1f2937;
-            font-weight: 800;
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #ef4444;
         }
         
         .problem-card p {
             color: #6b7280;
-            font-size: 17px;
-            line-height: 1.7;
+            line-height: 1.8;
         }
         
-        /* Solution Section */
+        /* Solution */
         .solution {
-            padding: 100px 0;
-            background: white;
+            padding: 80px 0;
         }
         
-        .solution h2 {
-            font-size: 48px;
-            text-align: center;
-            margin-bottom: 25px;
-            color: #1f2937;
-            font-weight: 900;
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 60px;
         }
         
-        .solution-subtitle {
-            text-align: center;
-            font-size: 22px;
-            color: #6b7280;
-            margin-bottom: 60px;
-            font-weight: 500;
+        .comparison-card {
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .comparison-card.basic {
+            background: #f9fafb;
+        }
+        
+        .comparison-card.captia {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+            border-color: #667eea;
+        }
+        
+        .comparison-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-card ul {
+            list-style: none;
+        }
+        
+        .comparison-card li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .comparison-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .check {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .cross {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background: #f9fafb;
         }
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 45px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
         }
         
-        .feature {
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
-            padding: 40px;
-            border-radius: 20px;
-            transition: all 0.4s;
-            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-            border: 2px solid #e5e7eb;
-        }
-        
-        .feature:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 20px 50px rgba(102,126,234,0.15);
-            border-color: #667eea;
         }
         
         .feature-icon {
-            font-size: 72px;
-            margin-bottom: 25px;
-            filter: drop-shadow(3px 3px 8px rgba(0,0,0,0.15));
-        }
-        
-        .feature h3 {
-            font-size: 26px;
-            margin-bottom: 18px;
-            color: #1f2937;
-            font-weight: 800;
-        }
-        
-        .feature p {
-            color: #6b7280;
-            font-size: 17px;
-            line-height: 1.7;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-        }
-        
-        .testimonials h2 {
             font-size: 48px;
-            text-align: center;
-            margin-bottom: 60px;
-            color: #1f2937;
-            font-weight: 900;
+            margin-bottom: 16px;
         }
         
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 35px;
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
         }
         
-        .testimonial {
-            background: white;
-            padding: 45px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .testimonial:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            border-color: #667eea;
-        }
-        
-        .testimonial-text {
-            font-size: 19px;
-            color: #4b5563;
-            margin-bottom: 25px;
-            font-style: italic;
+        .feature-card p {
+            color: #6b7280;
             line-height: 1.7;
         }
         
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-        
-        .author-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 22px;
-            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
-        }
-        
-        .author-info h4 {
-            font-size: 17px;
-            color: #1f2937;
-            font-weight: 700;
-        }
-        
-        .author-info p {
-            font-size: 15px;
-            color: #6b7280;
-        }
-        
-        /* Pricing Section */
+        /* Pricing */
         .pricing {
-            padding: 100px 0;
-            background: white;
-        }
-        
-        .pricing h2 {
-            font-size: 48px;
-            text-align: center;
-            margin-bottom: 25px;
-            color: #1f2937;
-            font-weight: 900;
-        }
-        
-        .pricing-subtitle {
-            text-align: center;
-            font-size: 22px;
-            color: #6b7280;
-            margin-bottom: 60px;
-            font-weight: 500;
+            padding: 80px 0;
         }
         
         .pricing-card {
             max-width: 500px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-            padding: 60px;
-            border-radius: 30px;
-            box-shadow: 0 20px 80px rgba(0,0,0,0.15);
+            margin: 60px auto 0;
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
             text-align: center;
-            border: 4px solid #667eea;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .pricing-card:before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(102,126,234,0.1), transparent);
-            animation: shimmer-card 3s infinite;
-        }
-        
-        @keyframes shimmer-card {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .pricing-badge {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            display: inline-block;
-            margin-bottom: 25px;
-            font-weight: 800;
-            font-size: 14px;
-            letter-spacing: 1px;
-            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
-            position: relative;
-            z-index: 1;
+            border: 3px solid #667eea;
         }
         
         .pricing-card h3 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            font-weight: 900;
-            position: relative;
-            z-index: 1;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
         
-        .pricing-card .price {
-            font-size: 72px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 25px 0;
-            position: relative;
-            z-index: 1;
+        .price {
+            font-size: 56px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
         }
         
-        .pricing-card .period {
+        .price .period {
+            font-size: 24px;
             color: #6b7280;
-            font-size: 20px;
-            font-weight: 600;
         }
         
         .features-list {
-            list-style: none;
-            margin: 35px 0;
             text-align: left;
-            position: relative;
-            z-index: 1;
+            margin: 30px 0;
+            list-style: none;
         }
         
         .features-list li {
-            padding: 15px 0;
+            padding: 12px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 19px;
-            font-weight: 600;
+            gap: 10px;
         }
         
-        .features-list li:before {
+        .features-list li::before {
             content: "✓";
             color: #10b981;
-            font-weight: 900;
-            font-size: 26px;
-            flex-shrink: 0;
-        }
-        
-        /* How it Works */
-        .how-it-works {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-        }
-        
-        .how-it-works h2 {
-            font-size: 48px;
-            text-align: center;
-            margin-bottom: 60px;
-            color: #1f2937;
-            font-weight: 900;
-        }
-        
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 45px;
-        }
-        
-        .step {
-            text-align: center;
-            padding: 40px;
-            transition: transform 0.3s;
-        }
-        
-        .step:hover {
-            transform: translateY(-10px);
-        }
-        
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: 900;
-            margin: 0 auto 25px;
-            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
-        }
-        
-        .step h3 {
-            font-size: 24px;
-            margin-bottom: 18px;
-            color: #1f2937;
-            font-weight: 800;
-        }
-        
-        .step p {
-            color: #6b7280;
-            font-size: 17px;
-            line-height: 1.7;
-        }
-        
-        /* FAQ Section */
-        .faq {
-            padding: 100px 0;
-            background: white;
-        }
-        
-        .faq h2 {
-            font-size: 48px;
-            text-align: center;
-            margin-bottom: 60px;
-            color: #1f2937;
-            font-weight: 900;
-        }
-        
-        .faq-list {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-            padding: 35px;
-            margin-bottom: 25px;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .faq-item:hover {
-            transform: translateX(10px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-            border-color: #667eea;
-        }
-        
-        .faq-item h3 {
-            font-size: 22px;
-            margin-bottom: 18px;
-            color: #1f2937;
-            font-weight: 800;
-        }
-        
-        .faq-item p {
-            color: #6b7280;
-            font-size: 17px;
-            line-height: 1.7;
+            font-weight: bold;
+            font-size: 18px;
         }
         
         /* CTA Final */
         .cta-final {
-            padding: 120px 0;
+            padding: 80px 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta-final:before {
-            content: '';
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
-            top: -400px;
-            right: -400px;
-            border-radius: 50%;
         }
         
         .cta-final h2 {
-            font-size: 54px;
-            margin-bottom: 25px;
-            font-weight: 900;
+            font-size: 40px;
+            margin-bottom: 16px;
         }
         
         .cta-final p {
-            font-size: 24px;
-            margin-bottom: 50px;
-            max-width: 750px;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.95;
         }
         
         /* Footer */
         footer {
             background: #1f2937;
             color: white;
-            padding: 50px 0;
+            padding: 40px 0;
             text-align: center;
-        }
-        
-        footer a {
-            color: #60a5fa;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        footer a:hover {
-            text-decoration: underline;
         }
         
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 40px;
+                font-size: 32px;
             }
             
-            .hero-subtitle {
-                font-size: 19px;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .cta-button {
-                width: 100%;
-            }
-            
-            .demo-card {
-                margin: 0 20px;
-            }
-            
-            h2 {
-                font-size: 36px !important;
-            }
-            
-            .pricing-card {
-                padding: 40px;
+            .problem-grid,
+            .comparison,
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Top Banner -->
-    <div class="top-banner">
-        <div class="banner-content">
-            <span>🎉 Official</span>
-            <span class="hubspot-logo">
-                🟠 HubSpot
-            </span>
-            <span>Integration • Install in 60 seconds • 500+ Teams Trust Us</span>
-        </div>
-    </div>
-
     <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    📊 Captia
-                </div>
-                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="nav-btn">
-                    Install Now
-                </a>
+                <div class="logo">📊 Captia</div>
+                <a href="#pricing" class="cta-button">Get Started Free</a>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
-        <div class="particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-        </div>
-        
         <div class="container">
-            <div class="hero-badge">🚀 Trusted by 500+ Sales Teams Worldwide</div>
-            <h1>Stop Wasting Hours on<br>Meeting Notes</h1>
-            <p class="hero-subtitle">AI-powered meeting summaries that identify pain points, objections, and next steps automatically in your HubSpot timeline</p>
-            
-            <div class="hero-buttons">
-                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button cta-primary">
-                    Start Free Trial →
-                </a>
-                <a href="#how-it-works" class="cta-button cta-secondary">
-                    See How It Works
-                </a>
-            </div>
-            
-            <div class="hero-trust">
-                <div class="trust-badge">
-                    <span class="trust-icon">✓</span> 5 Free Summaries
-                </div>
-                <div class="trust-badge">
-                    <span class="trust-icon">✓</span> No Credit Card
-                </div>
-                <div class="trust-badge">
-                    <span class="trust-icon">✓</span> Setup in 60 Seconds
-                </div>
-            </div>
-            
-            <div class="hero-visual">
-                <div class="demo-card">
-                    <div class="demo-header">
-                        <div class="demo-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <div class="demo-title">📊 Meeting Summary - Sarah's Discovery Call</div>
-                    </div>
-                    <div class="demo-content">
-                        <div class="demo-section">
-                            <div class="demo-icon">🎯</div>
-                            <div class="demo-text">
-                                <strong>Pain Point:</strong> Losing 70% of leads due to poor follow-up
-                            </div>
-                        </div>
-                        <div class="demo-section">
-                            <div class="demo-icon">💰</div>
-                            <div class="demo-text">
-                                <strong>Budget:</strong> $12,000/month | <strong>Timeline:</strong> Q1 2025
-                            </div>
-                        </div>
-                        <div class="demo-section">
-                            <div class="demo-icon">🎲</div>
-                            <div class="demo-text">
-                                <strong>Close Probability:</strong> <span class="probability-high">HIGH</span> - CEO approval needed
-                            </div>
-                        </div>
-                        <div class="demo-section">
-                            <div class="demo-icon">✅</div>
-                            <div class="demo-text">
-                                <strong>Next Step:</strong> Demo on Dec 17 at 3pm with technical team
-                            </div>
-                        </div>
-                    </div>
-                    <div class="demo-footer">
-                        <span class="demo-time">⚡ Generated in 2.3 seconds</span>
-                    </div>
-                </div>
-            </div>
+            <h1>Already using Fathom or Fireflies?</h1>
+            <p class="subtitle">Get the strategic sales analysis they don't provide</p>
+            <p class="subtext">Budget detection • Decision mapping • Risk assessment • Deal scoring</p>
+            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="hero-cta">
+                Start Free Trial
+            </a>
+            <p class="hero-note">5 free analyses • No credit card required • 2-minute setup</p>
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat">
-                    <div class="stat-number">45min</div>
-                    <div class="stat-label">Saved per meeting</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">10x</div>
-                    <div class="stat-label">Faster than manual notes</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">95%</div>
-                    <div class="stat-label">Accuracy rate</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">$0.001</div>
-                    <div class="stat-label">Cost per summary</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Problem Section -->
+    <!-- Problem -->
     <section class="problem">
         <div class="container">
-            <h2>The Problem Every Sales Team Faces</h2>
-            <p class="problem-subtitle">Stop losing deals because of poor follow-up</p>
+            <h2 class="section-title">Your transcription tool gives you notes...</h2>
+            <p class="section-subtitle">But it doesn't help you close deals</p>
             
             <div class="problem-grid">
                 <div class="problem-card">
-                    <div class="problem-icon">⏰</div>
-                    <h3>Hours Wasted</h3>
-                    <p>Sales reps spend 30-45 minutes writing meeting summaries manually instead of selling</p>
+                    <h3>❌ Missing Budget Info</h3>
+                    <p>You have 10 pages of transcript but still don't know if they can actually afford your solution or who controls the budget.</p>
                 </div>
+                
                 <div class="problem-card">
-                    <div class="problem-icon">💸</div>
-                    <h3>Lost Opportunities</h3>
-                    <p>70% of leads are lost because there's no proper follow-up or action items tracking</p>
+                    <h3>❌ Unclear Decision Process</h3>
+                    <p>Who's the real decision maker? Who else needs to approve? Your notes don't tell you who you actually need to convince.</p>
                 </div>
+                
                 <div class="problem-card">
-                    <div class="problem-icon">😰</div>
-                    <h3>Critical Details Forgotten</h3>
-                    <p>Important objections, pain points, and buying signals are forgotten after the call</p>
+                    <h3>❌ Hidden Red Flags</h3>
+                    <p>The deal seemed good but stalled for months. Looking back, the warning signs were in the transcript—you just couldn't see them.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <h3>❌ No Action Plan</h3>
+                    <p>Great, you have a summary. Now what? You still have to figure out the strategic next steps yourself.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Solution Section -->
+    <!-- Solution -->
     <section class="solution">
         <div class="container">
-            <h2>The Solution: Captia AI</h2>
-            <p class="solution-subtitle">Automatic meeting summaries directly in your HubSpot timeline</p>
+            <h2 class="section-title">Captia: Strategic Intelligence Layer</h2>
+            <p class="section-subtitle">Works with your existing transcription tools</p>
+            
+            <div class="comparison">
+                <div class="comparison-card basic">
+                    <h3>Fathom / Fireflies / Zoom</h3>
+                    <ul>
+                        <li><span class="check">✓</span> Records meetings</li>
+                        <li><span class="check">✓</span> Transcribes accurately</li>
+                        <li><span class="check">✓</span> Basic summary</li>
+                        <li><span class="check">✓</span> Action items</li>
+                        <li><span class="cross">✗</span> Budget detection</li>
+                        <li><span class="cross">✗</span> Decision maker mapping</li>
+                        <li><span class="cross">✗</span> Risk assessment</li>
+                        <li><span class="cross">✗</span> Competitive intelligence</li>
+                        <li><span class="cross">✗</span> Deal probability score</li>
+                        <li><span class="cross">✗</span> Strategic next steps</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card captia">
+                    <h3>+ Captia Sales Intelligence</h3>
+                    <ul>
+                        <li><span class="check">✓</span> Uses your existing transcripts</li>
+                        <li><span class="check">✓</span> Identifies real budget</li>
+                        <li><span class="check">✓</span> Maps decision makers</li>
+                        <li><span class="check">✓</span> Flags risks early</li>
+                        <li><span class="check">✓</span> Spots competition mentions</li>
+                        <li><span class="check">✓</span> Extracts true timeline</li>
+                        <li><span class="check">✓</span> Calculates deal score</li>
+                        <li><span class="check">✓</span> Suggests next actions</li>
+                        <li><span class="check">✓</span> Saves to HubSpot automatically</li>
+                        <li><span class="check">✓</span> Only $15/month unlimited</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">What Makes Captia Different</h2>
+            <p class="section-subtitle">Strategic analysis built for sales teams</p>
             
             <div class="features-grid">
-                <div class="feature">
-                    <div class="feature-icon">🤖</div>
-                    <h3>Advanced AI Analysis</h3>
-                    <p>Identifies pain points, objections, budget, timeline, and buying signals automatically</p>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Budget Detection</h3>
+                    <p>Automatically identifies mentioned budget, financial constraints, and who controls spending decisions.</p>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">⚡</div>
-                    <h3>30 Seconds</h3>
-                    <p>Generate complete summaries in less time than it takes to make coffee</p>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Decision Mapping</h3>
+                    <p>Maps out who's involved, who has veto power, and who's the real decision maker—even when not obvious.</p>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Close Probability Score</h3>
-                    <p>Know which deals are most likely to close with AI-powered predictions</p>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3>Risk Assessment</h3>
+                    <p>Flags red flags, objections, and concerns that could derail the deal—before they do.</p>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">💡</div>
-                    <h3>Strategic Recommendations</h3>
-                    <p>Get specific action items and next steps for each opportunity</p>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚔️</div>
+                    <h3>Competitive Intel</h3>
+                    <p>Identifies when competitors are mentioned, what they're saying about them, and how to respond.</p>
                 </div>
-                <div class="feature">
+                
+                <div class="feature-card">
                     <div class="feature-icon">📊</div>
-                    <h3>Native HubSpot Integration</h3>
-                    <p>Summaries appear directly in the contact timeline - no external platforms</p>
+                    <h3>Deal Probability</h3>
+                    <p>AI-powered score based on budget, timeline, decision process, and engagement level.</p>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>
-                    <h3>100% Secure</h3>
-                    <p>Your data never leaves HubSpot. GDPR and SOC 2 compliant</p>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Next Best Actions</h3>
+                    <p>Strategic recommendations on exactly what to do next to move the deal forward.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials -->
-    <section class="testimonials">
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
         <div class="container">
-            <h2>Loved by Sales Teams</h2>
-            
-            <div class="testimonials-grid">
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "Captia saves me 5+ hours every week. I can focus on selling instead of taking notes. Game changer!"
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">JD</div>
-                        <div class="author-info">
-                            <h4>John Davis</h4>
-                            <p>Sales Director, TechCorp</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "The AI recommendations are spot-on. It catches things I would have missed. Our close rate increased 30%."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">SM</div>
-                        <div class="author-info">
-                            <h4>Sarah Miller</h4>
-                            <p>VP Sales, Growth Inc</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "Best $15/month I've ever spent. ROI was immediate. Every sales team should use this."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">MJ</div>
-                        <div class="author-info">
-                            <h4>Michael Johnson</h4>
-                            <p>CEO, SalesPro</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing">
-        <div class="container">
-            <h2>Simple, Transparent Pricing</h2>
-            <p class="pricing-subtitle">Start free, upgrade when you're ready</p>
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">No per-user fees. No hidden costs.</p>
             
             <div class="pricing-card">
-                <div class="pricing-badge">MOST POPULAR</div>
                 <h3>Captia Pro</h3>
                 <div class="price">$15<span class="period">/month</span></div>
                 
                 <ul class="features-list">
-                    <li>Unlimited summaries</li>
-                    <li>Advanced AI analysis</li>
-                    <li>Close probability score</li>
-                    <li>Strategic recommendations</li>
-                    <li>Native HubSpot integration</li>
-                    <li>Priority support</li>
-                    <li>Regular feature updates</li>
+                    <li>Unlimited analyses</li>
+                    <li>Works with any transcription source</li>
+                    <li>Budget & timeline detection</li>
+                    <li>Decision maker mapping</li>
+                    <li>Risk & objection flagging</li>
+                    <li>Competitive intelligence</li>
+                    <li>Deal probability scoring</li>
+                    <li>Strategic next steps</li>
+                    <li>HubSpot integration</li>
+                    <li>Email support</li>
                 </ul>
                 
-                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button cta-primary">
-                    Start Now
+                <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button" style="width: 100%; text-align: center; margin-top: 20px;">
+                    Start Free Trial
                 </a>
                 
-                <p style="margin-top: 25px; color: #6b7280; font-weight: 600; position: relative; z-index: 1;">💳 Cancel anytime • No long-term contracts</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it Works -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <h2>How It Works</h2>
-            
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Install in 1 Click</h3>
-                    <p>Connect Captia to your HubSpot account in seconds. No technical setup required.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Paste Your Transcript</h3>
-                    <p>Copy and paste your meeting transcript from Zoom, Google Meet, or any source.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Get Instant Summary</h3>
-                    <p>AI generates a complete executive summary directly in the contact's timeline.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>Take Action</h3>
-                    <p>Follow AI recommendations and close more deals with strategic insights.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq">
-        <div class="container">
-            <h2>Frequently Asked Questions</h2>
-            
-            <div class="faq-list">
-                <div class="faq-item">
-                    <h3>How accurate are the AI summaries?</h3>
-                    <p>Our AI achieves 95%+ accuracy using GPT-4, trained specifically for sales conversations. It identifies pain points, objections, budget, and next steps with high precision.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3>Is my data secure?</h3>
-                    <p>Absolutely. Your data never leaves HubSpot's secure environment. We're GDPR compliant and follow industry best practices for data security.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3>Can I cancel anytime?</h3>
-                    <p>Yes! Cancel anytime with one click. No questions asked, no long-term commitments.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3>Do you offer refunds?</h3>
-                    <p>We offer a 14-day money-back guarantee. If you're not satisfied, we'll refund you fully.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3>How many summaries can I generate?</h3>
-                    <p>5 free summaries to start, then unlimited summaries with the Pro plan at $15/month.</p>
-                </div>
+                <p style="margin-top: 20px; color: #6b7280; font-size: 14px;">
+                    5 free analyses to start • Cancel anytime
+                </p>
             </div>
         </div>
     </section>
@@ -1412,10 +531,10 @@
     <!-- CTA Final -->
     <section class="cta-final">
         <div class="container">
-            <h2>Ready to 10x Your Sales Productivity?</h2>
-            <p>Join hundreds of sales teams using Captia to close more deals faster.</p>
-            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="cta-button cta-primary">
-                Install Captia Free
+            <h2>Ready to Close More Deals?</h2>
+            <p>Start analyzing your meetings strategically in 2 minutes</p>
+            <a href="https://app.hubspot.com/oauth/authorize?client_id=78340611-74ac-4edd-9077-fd4ae779d87e&redirect_uri=https://captia.vercel.app/api/oauth&scope=oauth%20crm.objects.contacts.write" class="hero-cta">
+                Start Free Trial
             </a>
         </div>
     </section>
@@ -1424,10 +543,8 @@
     <footer>
         <div class="container">
             <p>&copy; 2025 Captia. All rights reserved.</p>
-            <p style="margin-top: 15px;">
-                <a href="mailto:hello@captia.com">Contact</a> • 
-                <a href="#">Privacy Policy</a> • 
-                <a href="#">Terms of Service</a>
+            <p style="margin-top: 10px; font-size: 14px; opacity: 0.8;">
+                Strategic Sales Intelligence for HubSpot
             </p>
         </div>
     </footer>
