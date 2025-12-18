@@ -1,8 +1,11 @@
 import admin from 'firebase-admin';
 
-// Inicializar Firebase Admin
+// Initialize Firebase Admin
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  const serviceAccount = JSON.parse(
+    Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf8')
+  );
+  
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
   });
@@ -11,29 +14,29 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).send("Method not allowed");
-  }
-
-  const { accessToken, contactId, transcript, userId } = req.body;
-
-  if (!accessToken || !contactId || !transcript) {
-    return res.status(400).json({ 
-      error: "Missing required fields: accessToken, contactId, and transcript" 
-    });
-  }
-
-  if (!userId) {
-    return res.status(400).json({ 
-      error: "Missing userId - required for quota tracking" 
-    });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    console.log('[CAPTIA] Starting summary generation for userId:', userId);
+    const { userId, contactId, transcript, source, accessToken } = req.body;
 
-    // VERIFICAR QUOTA ANTES DE GERAR
-    const userDoc = await db.collection('users').doc(userId).get();
+    if (!userId || !transcript) {
+      return res.status(400).json({ 
+        error: 'Missing required fields: userId and transcript' 
+      });
+    }
+
+    console.log('[SAVE-SUMMARY] Request:', { 
+      userId, 
+      contactId, 
+      source: source || 'unknown',
+      transcriptLength: transcript.length 
+    });
+
+    // Check quota
+    const userRef = db.collection('users').doc(userId);
+    const userDoc = await userRef.get();
     
     let summariesUsed = 0;
     let isPro = false;
@@ -42,27 +45,28 @@ export default async function handler(req, res) {
       const userData = userDoc.data();
       summariesUsed = userData.summariesUsed || 0;
       isPro = userData.isPro || false;
-      console.log('[CAPTIA] User found. Summaries used:', summariesUsed, 'isPro:', isPro);
+      
+      console.log('[SAVE-SUMMARY] User found:', { summariesUsed, isPro });
     } else {
-      console.log('[CAPTIA] New user, will be created after generating summary');
+      console.log('[SAVE-SUMMARY] New user, will be created');
     }
 
-    // Bloquear se excedeu limite e não é PRO
+    // Block if exceeded limit and not PRO
     const FREE_LIMIT = 5;
     if (!isPro && summariesUsed >= FREE_LIMIT) {
-      console.log('[CAPTIA] User reached free limit');
+      console.log('[SAVE-SUMMARY] User reached free limit');
       return res.status(403).json({
         error: "Free limit reached",
-        message: "You've used all 5 free summaries. Upgrade to Pro for unlimited summaries.",
+        message: "You've used all 5 free analyses. Upgrade to Pro for unlimited analyses.",
         summariesUsed: summariesUsed,
         needsUpgrade: true,
         upgradeUrl: "https://captia.vercel.app/#pricing"
       });
     }
 
-    console.log('[CAPTIA] Calling OpenAI API...');
+    console.log('[SAVE-SUMMARY] Calling OpenAI API...');
 
-    // Chamar OpenAI para gerar resumo
+    // Call OpenAI to generate strategic analysis
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -74,181 +78,209 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are a professional meeting summarizer. Analyze the meeting transcript and create a structured summary.
+            content: `You are an expert B2B sales strategist and deal analyst. Your job is to analyze sales conversation transcripts and extract STRATEGIC intelligence that helps close deals.
 
-INSTRUCTIONS:
-- Be EXTREMELY objective and direct
-- Identify ONLY information explicitly mentioned
-- Use professional sales language
-- Highlight PAIN POINTS and BUYING SIGNALS
-- Identify OBJECTIONS clearly
-- Suggest STRATEGIC NEXT STEPS
+Focus on identifying:
+1. BUDGET: Real budget (not just what they say), who controls it, financial constraints
+2. DECISION PROCESS: Who decides, who has veto power, approval process
+3. TIMELINE: Real timeline (not just target date), urgency level, deadline drivers
+4. PAIN POINTS: Specific problems, impact on business, cost of inaction
+5. COMPETITIVE LANDSCAPE: Other solutions being evaluated, why they're looking
+6. RISKS: Red flags, objections, concerns that could kill the deal
+7. BUYING SIGNALS: Signs they're ready to buy or just exploring
+8. NEXT ACTIONS: Specific strategic moves to advance the deal
 
-MANDATORY FORMAT:
+CRITICAL RULES:
+- Be EXTREMELY objective - if info isn't in transcript, say "Not mentioned"
+- Focus on what will help CLOSE THE DEAL, not just summarize
+- Identify subtle signals (hesitation, vague answers, enthusiasm)
+- Flag risks early - better to know now than be surprised later
+- Provide ACTIONABLE next steps, not generic advice
+
+OUTPUT FORMAT:
 
 🎯 EXECUTIVE SUMMARY
-- **Meeting Type:** [Discovery/Demo/Negotiation/Follow-up]
-- **Main Objective:** [1 clear sentence]
-- **Outcome:** [Positive/Neutral/Needs attention - 1 sentence]
+• **Meeting Type:** [Discovery/Demo/Negotiation/Follow-up/Other]
+• **Deal Stage:** [Early/Qualified/Proposal/Negotiation/Closing]
+• **Overall Sentiment:** [Very Positive/Positive/Neutral/Concerned/Negative]
+• **Key Takeaway:** [One sentence - most important insight]
 
-💼 CLIENT CONTEXT
-- **Company/Segment:** [if mentioned]
-- **Main Pain Point:** [specific problem client wants to solve]
-- **Problem Impact:** [consequences mentioned]
-- **Urgency:** [High/Medium/Low - based on tone]
+💰 BUDGET & FINANCIALS
+• **Mentioned Budget:** [Amount or "Not discussed"]
+• **Real Budget Signal:** [Analysis of actual budget based on context]
+• **Budget Holder:** [Who controls the money]
+• **Financial Constraints:** [Any limitations mentioned]
+• **Urgency:** [High/Medium/Low - Why?]
 
-💰 OPPORTUNITY
-- **Budget:** [mentioned amount or "Not discussed"]
-- **Timeline:** [when they want to start]
-- **Decision Makers:** [who participates in decision]
-- **Competitors:** [if any mentioned]
+👥 DECISION MAKERS & STAKEHOLDERS
+• **Primary Contact:** [Name/role if mentioned]
+• **Economic Buyer:** [Who signs the check]
+• **Decision Maker:** [Who makes final call]
+• **Influencers:** [Who else is involved]
+• **Approval Process:** [Steps needed to close]
 
-🚨 OBJECTIONS AND RISKS
-- [List each specific objection mentioned]
-- [If none, write "No objections raised"]
+📅 TIMELINE & URGENCY
+• **Target Start Date:** [When they want to begin]
+• **Decision Timeline:** [When they'll decide]
+• **Urgency Drivers:** [Why this timeline / What's pushing them]
+• **Deal Velocity:** [Fast/Normal/Slow - Why?]
 
-✅ NEXT STEPS
-- **Immediate:** [what was agreed to do now]
-- **Deadline:** [specific date/period]
-- **Responsible:** [who will do - client or seller]
+🎯 PAIN POINTS & VALUE
+• **Primary Pain:** [Main problem they're solving]
+• **Business Impact:** [How this problem affects them]
+• **Current Situation:** [What they're doing now]
+• **Desired Outcome:** [What success looks like]
 
-🎲 CLOSE PROBABILITY
-- **Score:** [High/Medium/Low]
-- **Justification:** [1 sentence explaining the score]
+⚔️ COMPETITIVE LANDSCAPE
+• **Competitors Mentioned:** [List or "None mentioned"]
+• **Why Evaluating:** [Reason for looking at solutions]
+• **Differentiators Discussed:** [What matters to them]
+• **Objections to Competitors:** [If any mentioned]
 
-💡 STRATEGIC RECOMMENDATIONS
-- [2-3 specific actions the seller should take based on the conversation]
+🚨 RISKS & RED FLAGS
+• **Major Risks:** [Things that could kill this deal]
+• **Objections Raised:** [Concerns they expressed]
+• **Hesitation Points:** [Where they seemed unsure]
+• **Missing Information:** [Critical unknowns]
 
-Be concise. Maximum 2-3 lines per section.`
+✅ BUYING SIGNALS
+• **Positive Indicators:** [Signs they want to buy]
+• **Engagement Level:** [How interested they seemed]
+• **Questions Asked:** [What they wanted to know]
+• **Next Steps They Proposed:** [If any]
+
+📊 DEAL SCORE: [0-100]
+**Probability to Close:** [High 70-100 / Medium 40-69 / Low 0-39]
+**Justification:** [2-3 sentences explaining the score based on:
+- Budget clarity and availability
+- Decision process clarity
+- Timeline and urgency
+- Pain severity and fit
+- Competitive position
+- Engagement level]
+
+🎯 STRATEGIC NEXT STEPS
+**Immediate (Within 24-48 hours):**
+1. [Specific action with why]
+2. [Specific action with why]
+
+**Short-term (This week):**
+1. [Specific action with why]
+
+**Risks to Address:**
+1. [Specific risk and how to mitigate]
+
+💡 SALES COACH INSIGHTS
+• **What Went Well:** [1-2 things done right]
+• **What to Improve:** [1-2 areas for improvement]
+• **Strategic Advice:** [1-2 key recommendations]
+
+---
+
+Be concise but thorough. Every insight should be ACTIONABLE.`
           },
           {
             role: "user",
-            content: `Analyze this sales meeting transcript and create an actionable executive summary:
+            content: `Analyze this sales conversation and provide strategic intelligence:
 
-${transcript}`
+TRANSCRIPT:
+${transcript}
+
+${source ? `\nSOURCE: ${source}` : ''}`
           }
         ],
         temperature: 0.7,
-        max_tokens: 1000
+        max_tokens: 2000
       })
     });
 
     if (!aiResponse.ok) {
-      const error = await aiResponse.json();
-      console.error('[CAPTIA] OpenAI error:', error);
-      return res.status(500).json({ error: "Failed to generate summary with AI" });
+      const errorText = await aiResponse.text();
+      console.error('[SAVE-SUMMARY] OpenAI error:', errorText);
+      throw new Error(`OpenAI API error: ${aiResponse.status}`);
     }
 
     const aiData = await aiResponse.json();
-    const aiSummary = aiData.choices[0].message.content;
+    const summary = aiData.choices[0].message.content;
+    
+    console.log('[SAVE-SUMMARY] AI analysis generated, length:', summary.length);
 
-    console.log('[CAPTIA] OpenAI response received. Tokens used:', aiData.usage.total_tokens);
-
-    // Formatar resumo final
-    const finalSummary = `📊 CAPTIA AI MEETING SUMMARY
-Generated on ${new Date().toLocaleDateString('en-US', { 
-      day: '2-digit', 
-      month: 'long', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })}
-
-${aiSummary}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 FULL TRANSCRIPT
-${transcript}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Powered by Captia AI | captia.com`;
-
-    console.log('[CAPTIA] Creating HubSpot engagement...');
-
-    // Criar engagement/nota na timeline
-    const engagementRes = await fetch(
-      "https://api.hubapi.com/engagements/v1/engagements",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          engagement: {
-            active: true,
-            type: "NOTE",
-            timestamp: Date.now()
-          },
-          associations: {
-            contactIds: [parseInt(contactId)]
-          },
-          metadata: {
-            body: finalSummary
+    // Save to HubSpot timeline (if accessToken provided)
+    if (accessToken && accessToken !== 'PLACEHOLDER_HANDLED_BY_BACKEND' && contactId) {
+      try {
+        console.log('[SAVE-SUMMARY] Saving to HubSpot...');
+        
+        const noteResponse = await fetch(
+          `https://api.hubapi.com/crm/v3/objects/notes`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              properties: {
+                hs_timestamp: Date.now(),
+                hs_note_body: `📊 CAPTIA SALES INTELLIGENCE ANALYSIS\n\nGenerated: ${new Date().toLocaleString()}\n${source ? `Source: ${source}\n` : ''}\n\n${summary}`,
+                hubspot_owner_id: null
+              },
+              associations: [
+                {
+                  to: { id: contactId },
+                  types: [{ 
+                    associationCategory: "HUBSPOT_DEFINED",
+                    associationTypeId: 202 
+                  }]
+                }
+              ]
+            })
           }
-        })
-      }
-    );
+        );
 
-    if (!engagementRes.ok) {
-      const error = await engagementRes.json();
-      console.error('[CAPTIA] HubSpot engagement error:', error);
-      return res.status(400).json(error);
+        if (noteResponse.ok) {
+          console.log('[SAVE-SUMMARY] Successfully saved to HubSpot');
+        } else {
+          const errorText = await noteResponse.text();
+          console.error('[SAVE-SUMMARY] HubSpot save failed:', errorText);
+        }
+      } catch (hubspotError) {
+        console.error('[SAVE-SUMMARY] HubSpot error:', hubspotError);
+        // Don't fail the whole request if HubSpot save fails
+      }
     }
 
-    const result = await engagementRes.json();
-    console.log('[CAPTIA] Engagement created successfully:', result.engagement.id);
-
-    // INCREMENTAR CONTADOR APÓS SUCESSO
-    console.log('[CAPTIA] Updating user quota...');
-    const userDocRef = db.collection('users').doc(userId);
-
+    // Increment usage counter in Firebase
     if (userDoc.exists) {
-      console.log('[CAPTIA] Updating existing user...');
-      await userDocRef.update({
+      await userRef.update({
         summariesUsed: admin.firestore.FieldValue.increment(1),
-        lastUsedAt: new Date().toISOString()
+        lastUsed: admin.firestore.FieldValue.serverTimestamp()
       });
-      console.log('[CAPTIA] User updated successfully');
+      console.log('[SAVE-SUMMARY] Incremented counter to:', summariesUsed + 1);
     } else {
-      console.log('[CAPTIA] Creating new user...');
-      await userDocRef.set({
+      await userRef.set({
         summariesUsed: 1,
         isPro: false,
-        createdAt: new Date().toISOString(),
-        lastUsedAt: new Date().toISOString()
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        lastUsed: admin.firestore.FieldValue.serverTimestamp()
       });
-      console.log('[CAPTIA] User created successfully');
+      console.log('[SAVE-SUMMARY] Created new user with count: 1');
     }
 
-    // Calcular novo saldo
-    const newSummariesUsed = summariesUsed + 1;
-    const summariesRemaining = isPro ? 'unlimited' : Math.max(0, FREE_LIMIT - newSummariesUsed);
-
-    console.log('[CAPTIA] New summaries used:', newSummariesUsed);
-    console.log('[CAPTIA] Summaries remaining:', summariesRemaining);
-
-    const responseData = {
-      status: "ok",
-      message: "AI summary saved to timeline",
-      engagementId: result.engagement.id,
-      contactId: contactId,
-      tokensUsed: aiData.usage.total_tokens,
-      cost: `~$${(aiData.usage.total_tokens / 1000000 * 0.15).toFixed(4)}`,
-      summariesUsed: newSummariesUsed,
-      summariesRemaining: summariesRemaining,
-      isPro: isPro
-    };
-
-    console.log('[CAPTIA] Returning response:', JSON.stringify(responseData));
-
-    return res.json(responseData);
+    return res.status(200).json({
+      status: "success",
+      message: "Strategic analysis generated and saved",
+      summary: summary,
+      summariesUsed: summariesUsed + 1,
+      summariesRemaining: isPro ? 'unlimited' : Math.max(0, FREE_LIMIT - (summariesUsed + 1)),
+      tokensUsed: aiData.usage?.total_tokens || 0,
+      source: source || 'unknown'
+    });
 
   } catch (error) {
-    console.error('[CAPTIA ERROR]', error);
-    return res.status(500).json({ 
-      error: "Internal server error",
-      details: error.message 
+    console.error('[SAVE-SUMMARY] Error:', error);
+    return res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
     });
   }
 }
